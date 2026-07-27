@@ -124,4 +124,74 @@ step12 SYS‑OUT (KOOP/POOK + Score)
     }
   }
 }
+🧩 ID‑Modus
+IMPORT besitzt drei Identitäts‑Modi:
+
+KOOP → Kooperation aktiv
+
+NEUTRAL → stabil, keine Aktion
+
+POOK → Prozess‑Abwicklung aktiv
+
+Diese werden über id.html gesteuert.
+
+✔ Status
+IMPORT ist vollständig:
+
+VECTOR‑kompatibel
+
+SYS‑kompatibel
+
+PIPE‑12‑fähig
+
+Orbit‑C‑fähig
+
+Stationen‑fähig
+
+RESPO‑fähig
+
+KOOP/POOK‑fähig
+
+
+---
+
+# ⭐ ID‑Modul (ID.js)  
+**→ 1:1 kopieren → in `IMPORT/ID.js` speichern**
+
+```js
+export const ID_KOOP = {
+    mode: "KOOP",
+    info() {
+        return `
+ID: KOOP
+Status: Aktiv
+Funktion: Kooperation mit VECTOR.EXP
+Rolle: RESPO_CORE → PIPE12 → SYS
+        `;
+    }
+};
+
+export const ID_NEUTRAL = {
+    mode: "NEUTRAL",
+    info() {
+        return `
+ID: NEUTRAL
+Status: Stabil
+Funktion: Achsen halten
+Rolle: ANKER / PQ / PX / PR
+        `;
+    }
+};
+
+export const ID_POOK = {
+    mode: "POOK",
+    info() {
+        return `
+ID: POOK
+Status: Prozess‑Abwicklung
+Funktion: PIPE‑12 Durchlauf
+Rolle: Orbit‑C / Stationen / NC‑Transit
+        `;
+    }
+};
 
