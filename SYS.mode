@@ -1,0 +1,5 @@
+const S = SYS.symbols;
+
+pq.innerHTML = `${S.PQ.id} – <b>${S.PQ.type}</b> (Score: ${window.SYS_SCORE})`;
+px.innerHTML = `${S.PX.id} – <b>${S.PX.type}</b> (Score: ${window.SYS_SCORE})`;
+pr.innerHTML = `${S.PR.id} – <b>${S.PR.type}</b> (Score: ${window.SYS_SCORE})`;
