@@ -1,20 +1,157 @@
-<script<script type="module">
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>IMPORT · PIPE12 · SYS · VECTOR · GEO</title>
+
+<style>
+body { background:#000; color:#0f0; font-family:Consolas; padding:20px; }
+h2 { color:#6cf; margin-top:30px; }
+pre { background:#111; padding:12px; border:1px solid #333; }
+.section { margin-bottom:40px; }
+</style>
+</head>
+<body>
+
+<h1>IMPORT · PIPE12 · SYS · VECTOR · GEO</h1>
+
+<div class="section">
+    <h2>PIPE12 Output</h2>
+    <pre id="pipe"></pre>
+</div>
+
+<div class="section">
+    <h2>SYS Mode (PQ / PX / PR)</h2>
+    <pre id="sysmode"></pre>
+</div>
+
+<div class="section">
+    <h2>VECTOR Achsen (QI / IQQ / OCTA)</h2>
+    <pre id="vector"></pre>
+</div>
+
+<div class="section">
+    <h2>Orbit‑C</h2>
+    <pre id="orbit"></pre>
+</div>
+
+<div class="section">
+    <h2>Stationen</h2>
+    <pre id="station"></pre>
+</div>
+
+<div class="section">
+    <h2>GEO – Vergangenheit / Zukunft / Epoche</h2>
+    <pre id="geo"></pre>
+</div>
+
+<script type="module">
+
+/* ------------------------------
+   VECTOR LADEN
+--------------------------------*/
+import raw from "../VECTOR/core/vector_raw.json" assert { type:"json" };
+import VECTOR_EXP from "../VECTOR/core/vector.EXP.js";
+
+window.vectorEXP = new VECTOR_EXP(raw);
+const vector = window.vectorEXP;
+
+/* ------------------------------
+   RESPO LADEN
+--------------------------------*/
+async function loadRESPO() {
+    const res = await fetch("./respo-funktion-6.csv");
+    const text = await res.text();
+    const lines = text.trim().split("\n").slice(1);
+
+    window.RESPO_LIST = lines.map(line => {
+        const [key, func, connect] = line.split(",");
+        return { key, func, "Connect‑Fähigkeit": connect };
+    });
+}
+loadRESPO();
+
+/* ------------------------------
+   PIPE12 LADEN
+--------------------------------*/
 import { PIPE12 } from "./PIPE.js";
 
+/* ------------------------------
+   SYS MODE LADEN
+--------------------------------*/
+import * as SYS from "./SYS.js";
+
+/* ------------------------------
+   GEO LADEN
+--------------------------------*/
+import * as GEO from "../VECTOR/GEOUniverse.js";
+
+/* ------------------------------
+   WARTEN BIS RESPO GELADEN
+--------------------------------*/
 async function waitForRespo() {
     while (!window.RESPO_LIST) {
         await new Promise(r => setTimeout(r, 50));
     }
 }
 
+/* ------------------------------
+   HAUPTLAUF
+--------------------------------*/
 async function run() {
+
     await waitForRespo();
-    const result = PIPE12(42);
-    document.getElementById("output").innerText =
-        JSON.stringify(result, null, 2);
+
+    const value = 42;
+
+    /* PIPE12 */
+    const pipe = PIPE12(value);
+    document.getElementById("pipe").innerText =
+        JSON.stringify(pipe, null, 2);
+
+    /* SYS MODE */
+    const S = SYS.SYS.symbols;
+    document.getElementById("sysmode").innerText =
+        `${S.PQ.id} – ${S.PQ.type}\n` +
+        `${S.PX.id} – ${S.PX.type}\n` +
+        `${S.PR.id} – ${S.PR.type}\n` +
+        `Score: ${window.SYS_SCORE}`;
+
+    /* VECTOR */
+    const v = {
+        qi: vector.qi(value),
+        iqq: vector.iqq(value),
+        octa: vector.octa(value)
+    };
+    document.getElementById("vector").innerText =
+        JSON.stringify(v, null, 2);
+
+    /* ORBIT‑C */
+    const ORBIT_C = ["⊙","⊕","⊗","○","□","△","◇","∞"];
+    document.getElementById("orbit").innerText =
+        ORBIT_C[v.qi];
+
+    /* STATIONEN */
+    const stations = [
+        "IKI","UC","ORBIT","SHIFT","AURA","NAVI",
+        "DRIFT","CORE","EDGE","FLOW","BALANCE","MATRIX"
+    ];
+    document.getElementById("station").innerText =
+        stations[v.qi];
+
+    /* GEO – Vergangenheit / Zukunft / Epoche */
+    const geo = {
+        past: GEO.past(value),
+        future: GEO.future(value),
+        epoch: GEO.epoch(value)
+    };
+    document.getElementById("geo").innerText =
+        JSON.stringify(geo, null, 2);
 }
 
 run();
-</script>
 
 </script>
+
+</body>
+</html>
