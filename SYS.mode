@@ -1,0 +1,9 @@
+const pq = document.getElementById("pq-status");
+const px = document.getElementById("px-status");
+const pr = document.getElementById("pr-status");
+
+const S = SYS.symbols;
+
+pq.innerHTML = `${S.PQ.id} – <b>${S.PQ.type}</b>`;
+px.innerHTML = `${S.PX.id} – <b>${S.PX.type}</b>`;
+pr.innerHTML = `${S.PR.id} – <b>${S.PR.type}</b>`;
