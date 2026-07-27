@@ -47,18 +47,14 @@ pre { background:#111; padding:12px; border:1px solid #333; }
 
 <script type="module">
 
-/* ------------------------------
-   VECTOR LADEN
---------------------------------*/
+/* VECTOR LADEN */
 import raw from "../VECTOR/core/vector_raw.json" assert { type:"json" };
 import VECTOR_EXP from "../VECTOR/core/vector.EXP.js";
 
 window.vectorEXP = new VECTOR_EXP(raw);
 const vector = window.vectorEXP;
 
-/* ------------------------------
-   RESPO LADEN
---------------------------------*/
+/* RESPO LADEN */
 async function loadRESPO() {
     const res = await fetch("./respo-funktion-6.csv");
     const text = await res.text();
@@ -71,33 +67,23 @@ async function loadRESPO() {
 }
 loadRESPO();
 
-/* ------------------------------
-   PIPE12 LADEN
---------------------------------*/
+/* PIPE12 LADEN */
 import { PIPE12 } from "./PIPE.js";
 
-/* ------------------------------
-   SYS MODE LADEN
---------------------------------*/
+/* SYS LADEN */
 import * as SYS from "./SYS.js";
 
-/* ------------------------------
-   GEO LADEN
---------------------------------*/
+/* GEO LADEN */
 import * as GEO from "../VECTOR/GEOUniverse.js";
 
-/* ------------------------------
-   WARTEN BIS RESPO GELADEN
---------------------------------*/
+/* WARTEN BIS RESPO GELADEN */
 async function waitForRespo() {
     while (!window.RESPO_LIST) {
         await new Promise(r => setTimeout(r, 50));
     }
 }
 
-/* ------------------------------
-   HAUPTLAUF
---------------------------------*/
+/* HAUPTLAUF */
 async function run() {
 
     await waitForRespo();
@@ -139,7 +125,7 @@ async function run() {
     document.getElementById("station").innerText =
         stations[v.qi];
 
-    /* GEO – Vergangenheit / Zukunft / Epoche */
+    /* GEO */
     const geo = {
         past: GEO.past(value),
         future: GEO.future(value),
