@@ -24,7 +24,7 @@ export function SYS_FIND_KOOP_POOK(respoList) {
         const orbitScore = qi * 5;
         const stationScore = (qi + 1) * 3;
 
-        return base + pipeScore + orbitScore + stationScore;
+        return base + pipeScore + orbitScore + stationScore + (iqq * 4) + (octa * 2);
     }
 
     const best = respoList.reduce((a, b) =>
@@ -36,6 +36,6 @@ export function SYS_FIND_KOOP_POOK(respoList) {
         pook: best.key === "RESPO_CORE",
         selected: best,
         score: scoreFor(best),
-        reason: "RESPO_CORE hat höchste SYS+VECTOR+PIPE+Orbit+Stationen Bewertung."
+        reason: "RESPO_CORE hat höchste SYS+VECTOR+QI+IQQ+PIPE+Orbit+Stationen Bewertung."
     };
 }
