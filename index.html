@@ -1,16 +1,20 @@
-<script type="module">
-import { SYS_FIND_KOOP_POOK } from "../sys/SYS.js";
+<script<script type="module">
+import { PIPE12 } from "./PIPE.js";
 
-async function loadRESPO() {
-    const res = await fetch("../sys/respo-funktion-6.csv");
-    const text = await res.text();
-    const lines = text.trim().split("\n").slice(1);
-
-    window.RESPO_LIST = lines.map(line => {
-        const [key, func, connect] = line.split(",");
-        return { key, func, "Connect‑Fähigkeit": connect };
-    });
+async function waitForRespo() {
+    while (!window.RESPO_LIST) {
+        await new Promise(r => setTimeout(r, 50));
+    }
 }
 
-loadRESPO();
+async function run() {
+    await waitForRespo();
+    const result = PIPE12(42);
+    document.getElementById("output").innerText =
+        JSON.stringify(result, null, 2);
+}
+
+run();
+</script>
+
 </script>
