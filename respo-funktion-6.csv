@@ -1,0 +1,7 @@
+﻿RESPO,Funktion,Connect‑Fähigkeit
+RESPO_CORE,Hauptkern,JA – Voll
+RESPO_SCAN9,Raster‑Scan,Teilweise
+RESPO_AXIS7,Achsen‑Analyse,Nein
+RESPO_LINE2,Linien‑Pfad,Nein
+RESPO_GHOST,Ghost‑Layer,Nein
+nc-check,Validierung,Nein
