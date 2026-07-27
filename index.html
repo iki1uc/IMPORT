@@ -2,47 +2,99 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>IMPORT · PIPE12 · SYS · VECTOR · GEO</title>
+<title>IMPORT · ECO · PIPE12 · SYS · VECTOR · GEO</title>
 
 <style>
-body { background:#000; color:#0f0; font-family:Consolas; padding:20px; }
-h2 { color:#6cf; margin-top:30px; }
-pre { background:#111; padding:12px; border:1px solid #333; }
-.section { margin-bottom:40px; }
+body {
+    background:#000;
+    color:#0f0;
+    font-family:Consolas;
+    padding:20px;
+}
+
+/* Überschriften */
+h1 { color:#6cf; text-shadow:0 0 10px #09f; }
+h2 { color:#0ff; margin-top:30px; }
+
+/* Boxen */
+.box {
+    background:#111;
+    border:1px solid #333;
+    padding:15px;
+    margin-bottom:30px;
+    border-radius:8px;
+}
+
+/* Orbit‑C Animation */
+.orbit3d {
+    width:150px;
+    height:150px;
+    margin:auto;
+    font-size:60px;
+    color:#6cf;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    animation:spin 4s linear infinite;
+    transform-style:preserve-3d;
+}
+@keyframes spin {
+    from { transform:rotateY(0deg); }
+    to   { transform:rotateY(360deg); }
+}
+
+/* Stationen Heatmap */
+.heatmap td {
+    padding:6px;
+    border:1px solid #222;
+    text-align:center;
+}
+
+/* GEO Timeline */
+.timeline {
+    display:flex;
+    gap:20px;
+}
+.timeline div {
+    padding:10px;
+    border:1px solid #333;
+    background:#111;
+    border-radius:6px;
+}
 </style>
 </head>
 <body>
 
-<h1>IMPORT · PIPE12 · SYS · VECTOR · GEO</h1>
+<h1>IMPORT · ECO · PIPE12 · SYS · VECTOR · GEO</h1>
 
-<div class="section">
+<div class="box">
     <h2>PIPE12 Output</h2>
     <pre id="pipe"></pre>
 </div>
 
-<div class="section">
+<div class="box">
     <h2>SYS Mode (PQ / PX / PR)</h2>
     <pre id="sysmode"></pre>
 </div>
 
-<div class="section">
+<div class="box">
     <h2>VECTOR Achsen (QI / IQQ / OCTA)</h2>
     <pre id="vector"></pre>
 </div>
 
-<div class="section">
-    <h2>Orbit‑C</h2>
-    <pre id="orbit"></pre>
+<div class="box">
+    <h2>Orbit‑C (3D Animation)</h2>
+    <div id="orbit" class="orbit3d"></div>
 </div>
 
-<div class="section">
-    <h2>Stationen</h2>
-    <pre id="station"></pre>
+<div class="box">
+    <h2>Stationen (Heatmap)</h2>
+    <table id="station" class="heatmap"></table>
 </div>
 
-<div class="section">
-    <h2>GEO – Vergangenheit / Zukunft / Epoche</h2>
-    <pre id="geo"></pre>
+<div class="box">
+    <h2>GEO – Timeline (Vergangenheit / Zukunft / Epoche)</h2>
+    <div id="geo" class="timeline"></div>
 </div>
 
 <script type="module">
@@ -50,7 +102,6 @@ pre { background:#111; padding:12px; border:1px solid #333; }
 /* VECTOR LADEN */
 import raw from "../VECTOR/core/vector_raw.json" assert { type:"json" };
 import VECTOR_EXP from "../VECTOR/core/vector.EXP.js";
-
 window.vectorEXP = new VECTOR_EXP(raw);
 const vector = window.vectorEXP;
 
@@ -117,22 +168,35 @@ async function run() {
     document.getElementById("orbit").innerText =
         ORBIT_C[v.qi];
 
-    /* STATIONEN */
+    /* STATIONEN HEATMAP */
     const stations = [
         "IKI","UC","ORBIT","SHIFT","AURA","NAVI",
         "DRIFT","CORE","EDGE","FLOW","BALANCE","MATRIX"
     ];
-    document.getElementById("station").innerText =
-        stations[v.qi];
+    let heat = "";
+    for (let i = 0; i < 12; i++) {
+        heat += "<tr>";
+        for (let j = 0; j < 12; j++) {
+            const active = (i === v.qi && j === v.qi);
+            const color = active ? "#004" : `rgb(0,${j*20},0)`;
+            heat += `<td style="background:${color}; color:${active ? "#6cf" : "#0f0"}">${stations[j]}</td>`;
+        }
+        heat += "</tr>";
+    }
+    document.getElementById("station").innerHTML = heat;
 
-    /* GEO */
+    /* GEO TIMELINE */
     const geo = {
         past: GEO.past(value),
         future: GEO.future(value),
         epoch: GEO.epoch(value)
     };
-    document.getElementById("geo").innerText =
-        JSON.stringify(geo, null, 2);
+
+    document.getElementById("geo").innerHTML = `
+        <div><b>Vergangenheit</b><br>${geo.past}</div>
+        <div><b>Zukunft</b><br>${geo.future}</div>
+        <div><b>Epoche</b><br>${geo.epoch}</div>
+    `;
 }
 
 run();
